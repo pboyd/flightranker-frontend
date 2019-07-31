@@ -113,8 +113,8 @@ class FlightForm extends React.Component {
         const dest = <AirportSelector label="Destination" name="destination" onChange={(val) => this.setState({destinationCode: val})}/>;
         return (
             <form onSubmit={this.handleSubmit}>
-                <p class="subtitle is-4">{SUBTITLE}</p>
-                <p class="content">{INSTRUCTIONS}</p>
+                <p className="subtitle is-4">{SUBTITLE}</p>
+                <p className="content">{INSTRUCTIONS}</p>
                 <div id="flightForm" className="field is-grouped">
                     {origin}
                     {dest}
@@ -247,6 +247,10 @@ class App extends React.Component {
     }
 
     render() {
+        if (this.state.static) {
+            return (this.state.static);
+        }
+
         return (
             <div>
                 <FlightForm onSubmit={this.changeFlight} loading={this.state.loading}/>
@@ -285,6 +289,12 @@ class App extends React.Component {
                     document.location.hash.substring(5, 8),
                 );
             }
+        } else if (document.location.pathname === "/about") {
+            import('./about').then(about => {
+                this.setState({
+                    static: <about.About/>
+                })
+            });
         }
     }
 

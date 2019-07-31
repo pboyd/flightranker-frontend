@@ -19,11 +19,21 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Flight Stats</title>
+    <title>Flight Ranker</title>
   </head>
   <body>
+    <nav class="navbar has-shadow" role="navigation">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item"><img src="/flightranker.png" alt="flight ranker"/></a>
+        </div>
+        <div class="navbar-menu">
+            <a href="/about.html" class="navbar-item is-active">About</a>
+        </div>
+    </nav>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <section id="root" class="section"></div>
+    <section class="section">
+        <div id="root" class="container"></div>
+    </section>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss'
 
+const SUBTITLE = "What are the odds your flight is on time?";
+const INSTRUCTIONS = "Search by city, airport name or airport code to find out. Supports direct flights in the United States.";
+
 class AirportSearchResults extends React.Component {
     render() {
         if (this.props.values == null || this.props.values.length === 0) {
@@ -45,7 +48,7 @@ class AirportSelector extends React.Component {
 
         return (
             <div className="control">
-                    <input placeholder={this.props.label} className="input isSmall" type="text"  onChange={this.onChange} list={dataListID}/>
+                    <input placeholder={this.props.label} className="input" type="text"  onChange={this.onChange} list={dataListID}/>
                     {results}
             </div>
         );
@@ -110,6 +113,8 @@ class FlightForm extends React.Component {
         const dest = <AirportSelector label="Destination" name="destination" onChange={(val) => this.setState({destinationCode: val})}/>;
         return (
             <form onSubmit={this.handleSubmit}>
+                <p class="subtitle is-4">{SUBTITLE}</p>
+                <p class="content">{INSTRUCTIONS}</p>
                 <div id="flightForm" className="field is-grouped">
                     {origin}
                     {dest}

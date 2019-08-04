@@ -5,6 +5,8 @@ import './index.scss'
 const SUBTITLE = "What are the odds your flight is on time?";
 const INSTRUCTIONS = "Search by city, airport name or airport code to find out. Supports direct flights in the United States.";
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL || "http://localhost:8080";
+
 class AirportSearchResults extends React.Component {
     render() {
         if (this.props.values == null || this.props.values.length === 0) {
@@ -84,7 +86,7 @@ class AirportSelector extends React.Component {
             return;
         }
 
-        fetch("http://localhost:8080/?q={airportList(term:\"" + e.target.value + "\"){code,name,city,state}}")
+        fetch(BACKEND_URL + "/?q={airportList(term:\"" + e.target.value + "\"){code,name,city,state}}")
             .then((res) => {
                 return res.json();
             })
@@ -190,7 +192,7 @@ class FlightInfo extends React.Component {
 
         this.props.loadingStart();
 
-        fetch('http://localhost:8080/?q={flightStatsByAirline(origin:"' + this.props.origin +'",destination:"' + this.props.destination + '"){airline,onTimePercentage,lastFlight},origin:airport(code:"' + this.props.origin + '"){code,name,city,state},destination:airport(code:"' + this.props.destination + '"){code,name,city,state}}')
+        fetch(BACKEND_URL + '/?q={flightStatsByAirline(origin:"' + this.props.origin +'",destination:"' + this.props.destination + '"){airline,onTimePercentage,lastFlight},origin:airport(code:"' + this.props.origin + '"){code,name,city,state},destination:airport(code:"' + this.props.destination + '"){code,name,city,state}}')
             .then((res) => {
                 return res.json();
             })

@@ -1,5 +1,5 @@
 # Before building the docker image, compile the source:
-# REACT_APP_BACKEND_URL="http://flightranker.com/gql" npm run-script build
+# REACT_APP_BACKEND_URL="https://flightranker.com/gql" npm run-script build
 
 FROM nginx:alpine
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Bar } from 'react-chartjs-2';
 import './index.scss'
 
 const SUBTITLE = "What are the odds your flight is on time?";
@@ -181,6 +182,8 @@ class FlightInfo extends React.Component {
                         {rows}
                     </tbody>
                 </table>
+
+                <Bar data={this.state.chartData} options={chartOptions}/>
             </div>
         );
     }
@@ -192,7 +195,7 @@ class FlightInfo extends React.Component {
 
         this.props.loadingStart();
 
-        fetch(BACKEND_URL + '/?q={flightStatsByAirline(origin:"' + this.props.origin +'",destination:"' + this.props.destination + '"){airline,onTimePercentage,lastFlight},origin:airport(code:"' + this.props.origin + '"){code,name,city,state},destination:airport(code:"' + this.props.destination + '"){code,name,city,state}}')
+        fetch(BACKEND_URL + '/?q={flightStatsByAirline(origin:"' + this.props.origin +'",destination:"' + this.props.destination + '"){airline,onTimePercentage,lastFlight},origin:airport(code:"' + this.props.origin + '"){code,name,city,state},destination:airport(code:"' + this.props.destination + '"){code,name,city,state},dailyFlightStats(origin:"' + this.props.origin + '",destination:"' + this.props.destination + '"){airline,days{date,onTimePercentage}}}')
             .then((res) => {
                 return res.json();
             })
@@ -201,6 +204,7 @@ class FlightInfo extends React.Component {
                     origin: body.origin,
                     destination: body.destination,
                     stats: body.flightStatsByAirline,
+                    chartData: convertDailyStatsToChartData(body.dailyFlightStats),
                 });
 
                 let title = "Flight Stats"
@@ -326,4 +330,75 @@ function parseFormattedAirport(value) {
     }
 
     return value.substring(openParen+1, closeParen);
+}
+
+function convertDailyStatsToChartData(stats) {
+    if (stats === null || stats.length === 0) {
+        return null;
+    }
+
+    return {
+        datasets: dailyStatsData(stats),
+    };
+}
+
+const chartOptions = {
+    scales: {
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'On-Time Percentage',
+            },
+        }],
+        xAxes: [{
+            type: 'time',
+            display: true,
+            time: {
+                parser: 'YYYY-MM-DDTHH:mm:ssZ',
+                tooltipFormat: 'YYYY-MM-DD'
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Date'
+            },
+        }],
+    },
+};
+
+function dailyStatsData(stats) {
+    const colors = defaultChartColors()
+
+    return stats.map((airline) => {
+        const color = colors.shift()
+        return {
+            label: airline.airline,
+            fill: false,
+            backgroundColor: color,
+            borderColor: color,
+            data: airline.days.map((day) => (
+                {
+                    x: day.date,
+                    y: day.onTimePercentage,
+                }
+            )),
+        }
+    });
+}
+
+function defaultChartColors() {
+    return [
+        '#cc3333',
+        '#3333cc',
+        '#33cc33',
+        '#33cccc',
+        '#cccc33',
+        '#990000',
+        '#000099',
+        '#009900',
+        '#009999',
+        '#999900',
+        '#999999',
+        '#cccccc',
+        '#000000',
+    ];
 }

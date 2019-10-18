@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import './index.scss'
 
 const SUBTITLE = "What are the odds your flight is on time?";
@@ -183,7 +183,7 @@ class FlightInfo extends React.Component {
                     </tbody>
                 </table>
 
-                <Bar data={this.state.chartData} options={chartOptions}/>
+                <Line data={this.state.chartData} options={chartOptions}/>
             </div>
         );
     }
@@ -195,7 +195,7 @@ class FlightInfo extends React.Component {
 
         this.props.loadingStart();
 
-        fetch(BACKEND_URL + '/?q={flightStatsByAirline(origin:"' + this.props.origin +'",destination:"' + this.props.destination + '"){airline,onTimePercentage,lastFlight},origin:airport(code:"' + this.props.origin + '"){code,name,city,state},destination:airport(code:"' + this.props.destination + '"){code,name,city,state},dailyFlightStats(origin:"' + this.props.origin + '",destination:"' + this.props.destination + '"){airline,days{date,onTimePercentage}}}')
+        fetch(BACKEND_URL + '/?q={flightStatsByAirline(origin:"' + this.props.origin +'",destination:"' + this.props.destination + '"){airline,onTimePercentage,lastFlight},origin:airport(code:"' + this.props.origin + '"){code,name,city,state},destination:airport(code:"' + this.props.destination + '"){code,name,city,state},monthlyFlightStats(origin:"' + this.props.origin + '",destination:"' + this.props.destination + '"){airline,rows{date,onTimePercentage}}}')
             .then((res) => {
                 return res.json();
             })
@@ -204,7 +204,7 @@ class FlightInfo extends React.Component {
                     origin: body.origin,
                     destination: body.destination,
                     stats: body.flightStatsByAirline,
-                    chartData: convertDailyStatsToChartData(body.dailyFlightStats),
+                    chartData: convertDailyStatsToChartData(body.monthlyFlightStats),
                 });
 
                 let title = "Flight Stats"
@@ -375,7 +375,7 @@ function dailyStatsData(stats) {
             fill: false,
             backgroundColor: color,
             borderColor: color,
-            data: airline.days.map((day) => (
+            data: airline.rows.map((day) => (
                 {
                     x: day.date,
                     y: day.onTimePercentage,

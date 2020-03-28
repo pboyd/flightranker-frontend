@@ -3,17 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bulma": "^0.7.5",
     "chart.js": "^2.8.0",
-    "node-sass": "^4.13.1",
     "react": "^16.8.6",
     "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.8.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "parcel serve public/index.html",
+    "build": "parcel build public/index.html",
     "lint": "eslint \"src/**/*.js\" --quiet",
     "format": "prettier --write \"src/**/*.js\""
   },
@@ -36,6 +33,7 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
+    "parcel-bundler": "^1.12.4",
     "prettier": "^1.19.1"
   }
 }

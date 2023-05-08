@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bulma": "^0.7.5",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "node-sass": "^8.0.0",
     "react": "^16.8.6",
     "react-chartjs-2": "^2.8.0",
